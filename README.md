@@ -1,2 +1,2 @@
-# aracor-ai-assignment-mandanafasounaki
-document analyzer
+# LLM-based Document Analyzer
+Aracor assignment
