@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "document-analyzer"
+version = "0.1.0"
+description = "Document analysis system using multiple LLM providers"
+authors = ["Mandana Fasounaki <mandana.fasounaki@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = "^0.1.0"
+pydantic = "^2.5.0"
