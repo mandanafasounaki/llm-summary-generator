@@ -1,0 +1,24 @@
+from pydantic_settings import BaseSettings
+from typing import Optional, Literal
+
+class Settings(BaseSettings):
+    """
+    Application settings and configuration
+    """
+
+    # API Keys
+    OPENAI_KEY: Optional[str] = None
+    ANTHROPIC_KEY: Optional[str] = None
+
+
+    # Documents
+    SUPPORTED_FORMATS: Literal[".pdf", ".txt", ".docx"] = '.pdf'
+    MAX_FILE_SIZE: int = 10 * 1024 * 1024
+    
+
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
+
+
+settings = Settings()
