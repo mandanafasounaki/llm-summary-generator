@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from typing import Optional, Literal
+from typing import Optional, Literal, ClassVar
 
 class Settings(BaseSettings):
     """
@@ -9,7 +9,10 @@ class Settings(BaseSettings):
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
+    HUGGINGFACEHUB_API_TOKEN: str  
     DEFAULT_MODEL: str = 'anthropic'
+    USE_LLAMA: str = True
+    USE_GPTJ: str = True
 
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
