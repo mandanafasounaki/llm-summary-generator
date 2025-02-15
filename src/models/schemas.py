@@ -21,7 +21,7 @@ class DocumentClass(BaseModel):
         path = Path(v)
         if not path.exists():
             raise ValueError(f"File not found: {v}")
-        if v.stat().st_size > settings.MAX_FILE_SIZE:
+        if path.stat().st_size > settings.MAX_FILE_SIZE:
             raise ValueError(f"File size exceeds limit: {v}")
         return v
 
