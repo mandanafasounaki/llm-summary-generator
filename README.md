@@ -52,10 +52,10 @@ DEFAULT_MODEL_PROVIDER=anthropic
 ### Basic Usage
 
 ```python
-from .processors.document import DocumentProcessor
-from .services import ModelManager, SummaryGenerator
-from .config.settings import settings
-from .models.schemas import SummaryRequest, SummaryCompareReq
+from src.processors.document import DocumentProcessor
+from src.services import ModelManager, SummaryGenerator
+from src.config.settings import settings
+from src.models.schemas import SummaryRequest, SummaryCompareReq
 import logging
 
 logger = logging.getLogger(__name__)
