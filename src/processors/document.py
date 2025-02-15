@@ -29,8 +29,8 @@ class DocumentProcessor:
             Extracted text from the document
         """
         input_doc = DocumentClass(file_path=file_path)
-        doc_path = Path(input_doc.file_path)
-        doc_suffix = doc_path.suffix
+        doc_path = input_doc.file_path
+        doc_suffix = input_doc.file_path.suffix
 
         if doc_suffix not in self.SUPPORTED_FORMATS:
             raise ValueError(f"Unsupported format: {doc_suffix}")
