@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
-    HUGGINGFACEHUB_API_TOKEN: Optional[str] = None   
+    HUGGINGFACEHUB_API_TOKEN: Optional[str] = None
     DEFAULT_MODEL: str = "anthropic"
     USE_GEMMA: bool = True
 

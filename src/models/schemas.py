@@ -19,7 +19,7 @@ class DocumentClass(BaseModel):
     @field_validator("file_path")
     def validate_file_path(cls, v: Path):
         if not v.exists():
-            raise FileNotFoundError(f"File not found: {v}")
+            raise ValueError(f"File not found: {v}")
         if v.stat().st_size > settings.MAX_FILE_SIZE:
             raise ValueError(f"File size exceeds limit: {v}")
         return v
