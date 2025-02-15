@@ -23,8 +23,15 @@ def main():
     # logger.info(f"LLAMA: {model_manager.get_completion('llama', 'tell me a joke')}")
     # logger.info(f"CLAUDE: {model_manager.get_completion('anthropic', 'tell me a brief joke')}")
     summary_generator = SummaryGenerator(model_manager)
-    summary = summary_generator.generate_summary(pdf_text, provider='anthropic')
-    logger.info(summary)
+
+    llama_summary = summary_generator.generate_summary(pdf_text, provider='gemma')
+    logger.info(llama_summary)
+
+    claude_summary = summary_generator.generate_summary(pdf_text, provider='anthropic')
+    logger.info(claude_summary)
+    
+    evaluation = summary_generator.compare_summaries(pdf_text, [claude_summary, llama_summary])
+    logger.info(evaluation)
 
 
 if __name__ == "__main__":
