@@ -2,7 +2,7 @@ from ..config.settings import settings
 from ..models.schemas import DocumentClass
 import logging
 from pathlib import Path
-import PyPDF2 
+import pypdf 
 from docx import Document
 
 logging.basicConfig(level=logging.INFO)
@@ -48,7 +48,7 @@ class DocumentProcessor:
         Extract text from PDF file.
         """
         with open(path, 'rb') as f:
-            reader = PyPDF2.PdfReader(f)
+            reader = pypdf.PdfReader(f)
             text = ""
             for page in reader.pages:
                 text += page.extract_text() + '\n'

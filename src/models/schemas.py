@@ -1,5 +1,5 @@
 import logging
-from pydantic import Field, BaseModel, validator
+from pydantic import Field, BaseModel, field_validator
 from typing import List, Optional, Literal
 from pathlib import Path
 from ..config.settings import settings
@@ -12,13 +12,14 @@ class DocumentClass(BaseModel):
     """
     file_path: Path
     
-    @validator("file_path")
+    @field_validator("file_path")
     def validate_file_path(cls, v: Path):
         if not v.exists():
             raise FileNotFoundError(f"File not found: {v}")
         if v.stat().st_size > settings.MAX_FILE_SIZE:
             raise ValueError(f"File size exceeds limit: {v}")
         return v
+    model_config = {"arbitrary_types_allowed": True}
     
 class SummaryRequest(BaseModel):
     """
