@@ -52,10 +52,10 @@ DEFAULT_MODEL_PROVIDER=anthropic
 ### Basic Usage
 
 ```python
-from .processors.document import DocumentProcessor
-from .services import ModelManager, SummaryGenerator
-from .config.settings import settings
-from .models.schemas import SummaryRequest, SummaryCompareReq
+from src.processors.document import DocumentProcessor
+from src.services import ModelManager, SummaryGenerator
+from src.config.settings import settings
+from src.models.schemas import SummaryRequest, SummaryCompareReq
 import logging
 
 logger = logging.getLogger(__name__)
@@ -90,6 +90,16 @@ The system supports three types of summaries:
 - `brief`: 2-3 sentence overview
 - `detailed`: Comprehensive summary with main points
 - `bullets`: Key points in bullet format
+
+
+### Configuration Options
+
+Key configuration options in `.env`:
+```env
+MAX_RETRIES=3              # Maximum retry attempts for API calls
+REQUEST_TIMEOUT=30         # API request timeout in seconds
+CHUNK_SIZE=4000           # Text chunk size for processing
+```
 
 ### Running Tests
 

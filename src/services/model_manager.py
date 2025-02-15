@@ -36,7 +36,7 @@ class ModelManager:
                 model='gpt-4o',
                 temperature=0,
                 # timeout=30,
-                max_retries=3
+                max_retries=settings.MAX_RETRIES
             )
 
         if os.getenv('ANTHROPIC_API_KEY'):
@@ -44,7 +44,7 @@ class ModelManager:
                 model='claude-3-5-sonnet-20241022',
                 temperature=0,
                 # timeout=30,
-                max_retries=3,
+                max_retries=settings.MAX_RETRIES,
                 max_tokens=2048
                 )
         
