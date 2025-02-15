@@ -14,9 +14,9 @@ class Settings(BaseSettings):
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
-    HUGGINGFACEHUB_API_TOKEN: str
+    HUGGINGFACEHUB_API_TOKEN: Optional[str] = None   
     DEFAULT_MODEL: str = "anthropic"
-    USE_GEMMA: str = True
+    USE_GEMMA: bool = True
 
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024

@@ -61,7 +61,7 @@ class DocumentProcessor:
         """
         Extract text from docx file.
         """
-        doc = Document(path)
+        doc = Document(str(path))
         return "\n".join([par.text for par in doc.paragraphs])
 
     def _extract_from_txt(self, path: Path):

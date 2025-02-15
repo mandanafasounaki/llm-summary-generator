@@ -29,7 +29,7 @@ def create_test_docx(tmp_path: Path, content: str) -> Path:
     file_path = tmp_path / "test.docx"
     doc = Document()
     doc.add_paragraph(content)
-    doc.save(file_path)
+    doc.save(str(file_path))
     return file_path
 
 
