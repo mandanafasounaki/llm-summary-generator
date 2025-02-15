@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     HUGGINGFACEHUB_API_TOKEN: Optional[str] = None
     DEFAULT_MODEL: str = "anthropic"
     USE_GEMMA: bool = True
+    OPENAI_MODEL: str = "gpt-4o"
+    ANTHROPIC_MODEL: str = "claude-3-5-sonnet-20241022"
+    GOOGLE_MODEL: str = "google/gemma-2-9b-it"
 
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
