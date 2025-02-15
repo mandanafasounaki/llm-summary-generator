@@ -1,6 +1,6 @@
 import logging
 from .model_manager import ModelManager
-from typing import List
+from typing import List, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -8,8 +8,13 @@ logger = logging.getLogger(__name__)
 class SummaryGenerator:
     """Generate summaries from text using different LLMs"""
 
-    CHUNK_SIZE = 3000
+    CHUNK_SIZE = 4000
     DEFAULT_PROMPT = "Provide a brief summary of the following text: "
+    COMPARE_PROMPT = """
+    Consider the following text and the provided summaries. Compare and evaluate the provided summaries.
+    Here is the raw text: {text}
+    These are the summaries: {summaries}
+    """
 
     def __init__(self, model_manager: ModelManager):
         self.model_manager = model_manager
@@ -48,6 +53,7 @@ class SummaryGenerator:
         Returns:
             A dictionary containing the provider info and the summary
         """
+        # if len(text) > 10000:
         chunks = self._chunk_text(text)
         summaries = []
         try:
@@ -69,6 +75,25 @@ class SummaryGenerator:
                 "error": str(e),
                 "partial_summary": "\n\n".join(summaries) if summaries else None
             }
+        
+    def compare_summaries(self, text, summaries: List[Dict], provider: str = 'anthropic'):
+        """
+        Receives a list of summaries, compares and evaluates them.
 
-
+        Args:
+            text: raw text that was summarized
+            summaries: the list of generated summaries to be compared
+        Returns:
+            A dictionary containig provider info and the evaluation of summaries
+        """
+        prompt = self.COMPARE_PROMPT.format(text=text, summaries=summaries)
+        try:
+            evaluation = self.model_manager.get_completion(provider, prompt)
+            return {
+                "provider": provider,
+                "evaluation_of_summaries": evaluation
+            }
+        except Exception as e:
+            logger.error(f"An error occured during comparison: {e}")
+            raise
 

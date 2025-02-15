@@ -1,5 +1,6 @@
 import os
 import logging
+from typing import List, Dict, Optional
 from dotenv import load_dotenv
 from ..config.settings import settings
 from langchain_openai import ChatOpenAI
@@ -49,14 +50,14 @@ class ModelManager:
         
         # Open source models
         hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-        if os.getenv('USE_LLAMA') == 'True':
-             hf_llama = HuggingFaceEndpoint(repo_id="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        if os.getenv('USE_GEMMA') == 'True':
+             hf_neo = HuggingFaceEndpoint(repo_id="google/gemma-2-9b-it",
                                             task="text-generation",
                                             huggingfacehub_api_token=hf_token)
-             self.models['llama'] = ChatHuggingFace(llm=hf_llama)
+             self.models['gemma'] = ChatHuggingFace(llm=hf_neo)
             
         
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=4, max=60))
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     def get_completion(self, provider: str, prompt: str):
         """
         Get chat completion from specified model.
