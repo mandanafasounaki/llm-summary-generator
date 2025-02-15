@@ -20,7 +20,9 @@ def model_manager():
 def summary_generator(model_manager):
     return SummaryGenerator(model_manager)
 
+
 ## NOTE: I'm not sure about these tests. Should I use real models instead of mocks?
+
 
 class TestSummaryGenerator:
     TEXT = """AI-powered agents are an emerging field with no established theoretical frameworks fordefining, developing, 
@@ -117,10 +119,9 @@ class TestSummaryGenerator:
         assert response.summary == "Very short summary"
         model_manager.get_completion.assert_called_once()
 
-    ## How should I handle this?    
+    ## How should I handle this?
     def test_special_characters_handling(self, summary_generator, model_manager):
         pass
-      
 
     def test_error_handling(self, summary_generator, model_manager):
         # Arrange
