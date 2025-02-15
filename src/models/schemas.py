@@ -13,10 +13,11 @@ class DocumentClass(BaseModel):
     """
     Input validation document processing.
     """
-    file_path: str 
+
+    file_path: str
 
     @field_validator("file_path")
-    def validate_file_path(cls, v: str) -> str:  
+    def validate_file_path(cls, v: str) -> str:
         path = Path(v)
         if not path.exists():
             raise ValueError(f"File not found: {v}")
@@ -57,6 +58,7 @@ class SummaryCompareReq(BaseModel):
     """
     Input for comparing a list of summaries.
     """
+
     text: Optional[str] = None
     summaries: List[SummaryResponse]
     provider: str = "anthropic"

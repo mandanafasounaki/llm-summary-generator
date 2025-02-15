@@ -2,21 +2,18 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
-from src.processors.document import DocumentProcessor
-
 from src.config.settings import settings
 from src.models.schemas import (
-    DocumentClass,
+    PathSummaryReq,
     SummaryCompareReq,
     SummaryCompareResp,
-    SummaryRequest,
-    SummaryResponse,
-    PathSummaryReq
+    SummaryRequest
 )
+from src.processors.document import DocumentProcessor
 from src.services import ModelManager, SummaryGenerator
 
 # Configure logging
@@ -43,8 +40,8 @@ async def generate_summary(summary_req: PathSummaryReq):
     """
     Generate a summary from a file path
     """
-    try:  
-        
+    try:
+
         # Extract text from file_path
         text = doc_processor.extract_text(summary_req.file_path)
 
@@ -56,7 +53,7 @@ async def generate_summary(summary_req: PathSummaryReq):
             )
             summaries.append(summary_generator.generate_summary(summary_req))
 
-        return {'summaries': summaries}
+        return {"summaries": summaries}
 
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
@@ -66,9 +63,9 @@ async def generate_summary(summary_req: PathSummaryReq):
 @app.post("/compare-summaries", response_model=SummaryCompareResp)
 async def compare_summaries(compare_req: SummaryCompareReq):
     """
-    Generate and compare summaries from different providers for 
+    Generate and compare summaries from different providers for
     """
- 
+
     try:
         evaluation = summary_generator.compare_summaries(compare_req)
 
