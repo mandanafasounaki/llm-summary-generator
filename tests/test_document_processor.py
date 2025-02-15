@@ -1,8 +1,10 @@
-import pytest
-from pathlib import Path
-from reportlab.pdfgen import canvas
 from io import BytesIO
+from pathlib import Path
+
+import pytest
 from docx import Document
+from reportlab.pdfgen import canvas
+
 
 def create_test_pdf(tmp_path: Path, content: str) -> Path:
     """Create a real PDF file with the given content"""
@@ -14,11 +16,13 @@ def create_test_pdf(tmp_path: Path, content: str) -> Path:
     file_path.write_bytes(buffer.getvalue())
     return file_path
 
+
 def create_test_txt(tmp_path: Path, content: str) -> Path:
     """Create a text file with the given content"""
     file_path = tmp_path / "test.txt"
     file_path.write_text(content, encoding="utf-8")
     return file_path
+
 
 def create_test_docx(tmp_path: Path, content: str) -> Path:
     """Create a Word document with the given content"""
@@ -28,10 +32,12 @@ def create_test_docx(tmp_path: Path, content: str) -> Path:
     doc.save(file_path)
     return file_path
 
+
 def create_test_file(tmp_path: Path, content: str, suffix: str) -> Path:
     file_path = tmp_path / f"test{suffix}"
     file_path.write_text(content)
     return file_path
+
 
 class TestDocumentProcessor:
     TEXT = """AI-powered agents are an emerging field with no established theoretical frameworks fordefining, developing, 
@@ -44,44 +50,44 @@ class TestDocumentProcessor:
         whereas my post covers why and how things work. I alsofocus more on planning, tool selection, and failure modes.
         3.The post contains a lot of background information. Feel free to skip ahead if it feels a littletoo in the weeds!
         """
-    
+
     def test_pdf_processing(self, tmp_path, document_processor, settings):
         file_path = create_test_pdf(tmp_path, self.TEXT)
-        
+
         # Initialize processor with settings
         processor = document_processor
-        
+
         # Process the PDF
         result = processor.extract_text(str(file_path))
-        
+
         # Verify results
         assert isinstance(result, str)
         assert len(result) > 0
-    
+
     def test_txt_processing(self, tmp_path, document_processor, settings):
         # Create text file
         file_path = create_test_txt(tmp_path, self.TEXT)
-        
+
         # Initialize processor with settings
         processor = document_processor
-        
+
         # Process the text file
         result = processor.extract_text(str(file_path))
-        
+
         # Verify results
         assert isinstance(result, str)
         assert len(result) > 0
-    
+
     def test_docx_processing(self, tmp_path, document_processor, settings):
         # Create Word document
         file_path = create_test_docx(tmp_path, self.TEXT)
-        
+
         # Initialize processor with settings
         processor = document_processor
-        
+
         # Process the Word document
         result = processor.extract_text(str(file_path))
-        
+
         # Verify results
         assert isinstance(result, str)
         assert len(result) > 0

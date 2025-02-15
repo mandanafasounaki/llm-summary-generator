@@ -1,16 +1,25 @@
-import pytest
 from unittest.mock import Mock
+
+import pytest
+
+from src.models.schemas import (
+    SummaryCompareReq,
+    SummaryCompareResp,
+    SummaryRequest,
+    SummaryResponse,
+)
 from src.services.summary import SummaryGenerator
-from src.models.schemas import SummaryRequest, SummaryResponse, SummaryCompareReq, SummaryCompareResp
 
 
 @pytest.fixture
 def model_manager():
     return Mock()
 
+
 @pytest.fixture
 def summary_generator(model_manager):
     return SummaryGenerator(model_manager)
+
 
 class TestSummaryGenerator:
     TEXT = """AI-powered agents are an emerging field with no established theoretical frameworks fordefining, developing, 
@@ -23,14 +32,14 @@ class TestSummaryGenerator:
         whereas my post covers why and how things work. I alsofocus more on planning, tool selection, and failure modes.
         3.The post contains a lot of background information. Feel free to skip ahead if it feels a littletoo in the weeds!
         """
-    
+
     def test_brief_summary_generation(self, summary_generator, model_manager):
         # Arrange
         model_manager.get_completion.return_value = "This is a brief summary."
         request = SummaryRequest(
             text="This is a sample text that needs to be summarized.",
             summary_type="brief",
-            provider="anthropic"
+            provider="anthropic",
         )
 
         # Act
@@ -44,11 +53,13 @@ class TestSummaryGenerator:
 
     def test_detailed_summary_generation(self, summary_generator, model_manager):
         # Arrange
-        model_manager.get_completion.return_value = "This is a detailed summary with multiple points."
+        model_manager.get_completion.return_value = (
+            "This is a detailed summary with multiple points."
+        )
         request = SummaryRequest(
             text="This is a longer sample text that needs more detailed summarization.",
             summary_type="detailed",
-            provider="anthropic"
+            provider="anthropic",
         )
 
         # Act
@@ -64,7 +75,7 @@ class TestSummaryGenerator:
         request = SummaryRequest(
             text="Content that should be summarized in bullets.",
             summary_type="bullets",
-            provider="anthropic"
+            provider="anthropic",
         )
 
         # Act
@@ -79,9 +90,7 @@ class TestSummaryGenerator:
         long_text = "word " * 5000  # Creates text longer than CHUNK_SIZE
         model_manager.get_completion.return_value = "Chunk summary"
         request = SummaryRequest(
-            text=long_text,
-            summary_type="brief",
-            provider="anthropic"
+            text=long_text, summary_type="brief", provider="anthropic"
         )
 
         # Act
@@ -89,15 +98,15 @@ class TestSummaryGenerator:
 
         # Assert
         assert response.summary is not None
-        assert model_manager.get_completion.call_count > 1  # Should be called multiple times for chunks
+        assert (
+            model_manager.get_completion.call_count > 1
+        )  # Should be called multiple times for chunks
 
     def test_short_text_handling(self, summary_generator, model_manager):
         # Arrange
         model_manager.get_completion.return_value = "Very short summary"
         request = SummaryRequest(
-            text="Hello world",
-            summary_type="brief",
-            provider="anthropic"
+            text="Hello world", summary_type="brief", provider="anthropic"
         )
 
         # Act
@@ -112,9 +121,7 @@ class TestSummaryGenerator:
         special_text = "Special chars: !@#$%^&*()_+ àéîøū 漢字"
         model_manager.get_completion.return_value = "Summary with special chars"
         request = SummaryRequest(
-            text=special_text,
-            summary_type="brief",
-            provider="anthropic"
+            text=special_text, summary_type="brief", provider="anthropic"
         )
 
         # Act
@@ -126,11 +133,11 @@ class TestSummaryGenerator:
 
     def test_error_handling(self, summary_generator, model_manager):
         # Arrange
-        model_manager.get_completion.side_effect = Exception("An error occured in generating summary")
+        model_manager.get_completion.side_effect = Exception(
+            "An error occured in generating summary"
+        )
         request = SummaryRequest(
-            text="Sample text",
-            summary_type="brief",
-            provider="anthropic"
+            text="Sample text", summary_type="brief", provider="anthropic"
         )
 
         # Act
@@ -145,13 +152,15 @@ class TestSummaryGenerator:
         # Arrange
         model_manager.get_completion.return_value = "Comparison of summaries"
         summaries = [
-            SummaryResponse(provider="anthropic", summary="Summary 1", summary_type="brief"),
-            SummaryResponse(provider="gemma", summary="Summary 2", summary_type="brief")
+            SummaryResponse(
+                provider="anthropic", summary="Summary 1", summary_type="brief"
+            ),
+            SummaryResponse(
+                provider="gemma", summary="Summary 2", summary_type="brief"
+            ),
         ]
         compare_req = SummaryCompareReq(
-            text="Original text",
-            summaries=summaries,
-            provider="anthropic"
+            text="Original text", summaries=summaries, provider="anthropic"
         )
 
         # Act
