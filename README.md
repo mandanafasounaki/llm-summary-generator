@@ -107,3 +107,43 @@ Run tests with coverage:
 ```bash
 poetry run pytest -cov
 ```
+
+### Docker
+To run the API with Docker:
+1.
+```bash
+sudo docker build -t aracor-api . 
+```
+2.
+```bash
+sudo docker run --network host  -p 8000:8000 --env-file=.env --mount src="$(pwd)/sample_data",target=/sample_data,type=bind   aracor-api
+```
+### Requests
+**1. Summary Generation**
+```bash
+curl -X POST "http://127.0.0.1:8000/summarize" -H "Content-Type: application/json" -d '{"file_path": "/sample_data/CV.pdf", "summary_type": "bullets", "providers": ["anthropic", "gemma"]}'
+```
+**2.Compare Summaries**
+ ```bash
+ curl -X POST "http://localhost:8000/compare-summaries" \
+     -H "Content-Type: application/json" \
+     -d '{       "summaries": [
+         {
+           "provider": "anthropic",
+           "summary": "This is a summary from anthropic",
+           "summary_type": "brief",
+           "error": null,
+           "partial_summary": null
+         },
+         {
+           "provider": "openai",
+           "summary": "This is a summary from openai",
+           "summary_type": "brief",
+           "error": null,
+           "partial_summary": null
+         }
+       ],
+       "provider": "anthropic"
+     }'
+
+ ```
