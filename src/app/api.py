@@ -35,7 +35,7 @@ doc_processor = DocumentProcessor()
 summary_generator = SummaryGenerator(model_manager)
 
 
-@app.post("/summarize", response_model=SummaryResponse)
+@app.post("/summarize", response_model=Dict)
 async def generate_summary(file_path: str, summary_type: str = "brief", providers: List[str] = ["anthropic"]):
     """
     Generate a summary from a file path
