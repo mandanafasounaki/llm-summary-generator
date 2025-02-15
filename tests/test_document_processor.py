@@ -1,7 +1,5 @@
 import pytest
 from pathlib import Path
-from src.processors.document import DocumentProcessor
-from src.models.schemas import DocumentClass
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from docx import Document
