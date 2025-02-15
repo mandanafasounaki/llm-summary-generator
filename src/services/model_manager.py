@@ -31,7 +31,7 @@ class ModelManager:
 
         if os.getenv("OPENAI_API_KEY"):
             self.models["openai"] = ChatOpenAI(
-                model="gpt-4o",
+                model=settings.OPENAI_MODEL,
                 temperature=0,
                 # timeout=30,
                 max_retries=settings.MAX_RETRIES,
@@ -39,7 +39,7 @@ class ModelManager:
 
         if os.getenv("ANTHROPIC_API_KEY"):
             self.models["anthropic"] = ChatAnthropic(
-                model="claude-3-5-sonnet-20241022",
+                model=settings.ANTHROPIC_MODEL,
                 temperature=0,
                 # timeout=30,
                 max_retries=settings.MAX_RETRIES,
@@ -48,9 +48,9 @@ class ModelManager:
 
         # Open source models
         hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-        if os.getenv("USE_GEMMA") == "True":
+        if os.getenv("USE_GEMMA") == True:
             hf_neo = HuggingFaceEndpoint(
-                repo_id="google/gemma-2-9b-it",
+                repo_id=settings.GOOGLE_MODEL,
                 task="text-generation",
                 huggingfacehub_api_token=hf_token,
             )

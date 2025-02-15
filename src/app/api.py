@@ -8,25 +8,20 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 
 from src.processors.document import DocumentProcessor
 
-from ..config.settings import settings
-from ..models.schemas import (
+from src.config.settings import settings
+from src.models.schemas import (
     DocumentClass,
     SummaryCompareReq,
     SummaryCompareResp,
     SummaryRequest,
     SummaryResponse,
 )
-from ..services import ModelManager, SummaryGenerator
+from src.services import ModelManager, SummaryGenerator
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ALLOWED_TYPES = {
-    "text/plain",  # .txt
-    "application/pdf",  # .pdf
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # .docx
-}
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -43,102 +38,53 @@ summary_generator = SummaryGenerator(model_manager)
 
 
 @app.post("/summarize", response_model=SummaryResponse)
-async def generate_summary(
-    file: UploadFile = File(...),
-    summary_type: str = "brief",
-    provider: str = "anthropic",
-):
+async def generate_summary(file_path: str, summary_type: str = "brief", providers: List[str] = ["anthropic"]):
     """
-    Generate a summary from an uploaded document file (txt, pdf, or docx).
+    Generate a summary from a file path
     """
     try:
-        logger.info(file.content_type)
-        # Validate file format
-        # if file.content_type not in ALLOWED_TYPES:
-        #     raise HTTPException(
-        #         status_code=400,
-        #         detail=f"Unsupported format: {file.content_type}. Allowed formats: .txt, .docx, .pdf"
-        #     )
-        # Create temporary file
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            shutil.copyfileobj(file.file, temp_file)
-            temp_path = Path(temp_file.name)
-        logger.info(temp_path)
-        try:
-            # Validate file using DocumentClass
-            doc = DocumentClass(file_path=temp_path)
+        # Create input to document processor
+        doc = DocumentClass(file_path=file_path)
 
-            # Extract text from document
-            text = doc_processor.extract_text(str(doc.file_path))
+        # Extract text from document
+        text = doc_processor.extract_text(doc)
 
-            # Generate summary
+        # Generate summary
+        summaries = {}
+        for provider in providers:
             summary_req = SummaryRequest(
                 text=text, summary_type=summary_type, provider=provider
             )
-            summary = summary_generator.generate_summary(summary_req)
+            summaries[provider] = summary_generator.generate_summary(summary_req)
 
-            return summary
+        return summaries
 
-        finally:
-            # Clean up temporary file
-            temp_path.unlink()
-
-    except ValueError as e:
-        logger.error(f"Validation error: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/compare-summaries", response_model=SummaryCompareResp)
-async def compare_summaries(
-    file: UploadFile = File(...),
-    providers: List[str] = ["anthropic", "gemma"],
-    summary_type: str = "brief",
-):
+async def compare_summaries(file_path: str, summaries: List[SummaryResponse], provider: str = "anthropic"):
     """
-    Generate and compare summaries from different providers for an uploaded document.
+    Generate and compare summaries from different providers for 
     """
+ 
     try:
-        # Create temporary file
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            shutil.copyfileobj(file.file, temp_file)
-            temp_path = Path(temp_file.name)
+        # Validate file using DocumentClass
+        doc = DocumentClass(file_path=file_path)
 
-        try:
-            # Validate file using DocumentClass
-            doc = DocumentClass(file_path=temp_path)
+        # Extract text from document
+        text = doc_processor.extract_text(doc)
 
-            # Extract text from document
-            text = doc_processor.extract_text(str(doc.file_path))
+        # Generate summaries from all requested providers
+        summaries = []
+        
+        compare_req = SummaryCompareReq(text=text, summaries=summaries, provider=provider)
+        evaluation = summary_generator.compare_summaries(compare_req)
 
-            # Generate summaries from all requested providers
-            summaries = []
-            for provider in providers:
-                summary_req = SummaryRequest(
-                    text=text, provider=provider, summary_type=summary_type
-                )
-                summary = summary_generator.generate_summary(summary_req)
-                summaries.append(summary)
+        return evaluation
 
-            # Compare the generated summaries
-            compare_req = SummaryCompareReq(
-                text=text,
-                summaries=summaries,
-                provider="anthropic",  # Using anthropic as default comparison provider
-            )
-            evaluation = summary_generator.compare_summaries(compare_req)
-
-            return evaluation
-
-        finally:
-            # Clean up temporary file
-            temp_path.unlink()
-
-    except ValueError as e:
-        logger.error(f"Validation error: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

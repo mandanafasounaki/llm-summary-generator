@@ -28,7 +28,7 @@ class DocumentProcessor:
         Returns:
             Extracted text from the document
         """
-        input_doc = DocumentClass(file_path=Path(file_path))
+        input_doc = DocumentClass(file_path=file_path)
         doc_path = input_doc.file_path
         doc_suffix = input_doc.file_path.suffix
 

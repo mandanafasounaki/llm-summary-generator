@@ -24,8 +24,6 @@ class DocumentClass(BaseModel):
             raise ValueError(f"File size exceeds limit: {v}")
         return v
 
-    model_config = {"arbitrary_types_allowed": True}
-
 
 class SummaryRequest(BaseModel):
     """
@@ -50,9 +48,12 @@ class SummaryResponse(BaseModel):
 
 
 class SummaryCompareReq(BaseModel):
+    """
+    Input for comparing a list of summaries.
+    """
     text: str
     summaries: List[SummaryResponse]
-    provider: Optional[str] = "anthropic"
+    provider: str = "anthropic"
 
 
 class SummaryCompareResp(BaseModel):
