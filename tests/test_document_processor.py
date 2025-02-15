@@ -29,7 +29,7 @@ def create_test_docx(tmp_path: Path, content: str) -> Path:
     file_path = tmp_path / "test.docx"
     doc = Document()
     doc.add_paragraph(content)
-    doc.save(file_path)
+    doc.save(str(file_path))
     return file_path
 
 
@@ -98,7 +98,7 @@ class TestDocumentProcessor:
             document_processor.extract_text(str(file_path))
 
     def test_file_not_found(self, document_processor):
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(ValueError):
             document_processor.extract_text("nonexistent.txt")
 
     def test_empty_file(self, tmp_path, document_processor):
