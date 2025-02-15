@@ -51,7 +51,7 @@ class DocumentProcessor:
             text = ""
             for page in reader.pages:
                 text += page.extract_text() + '\n'
-            return text
+            return text.strip()
 
 
     def _extract_from_docx(self, path: Path):
