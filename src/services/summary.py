@@ -1,6 +1,7 @@
 import logging
 from .model_manager import ModelManager
 from typing import List, Dict
+from  ..models.schemas import SummaryRequest, SummaryResponse, SummaryCompareReq, SummaryCompareResp
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,7 @@ class SummaryGenerator:
         return chunks
 
 
-    def generate_summary(self, text: str, provider: str = "llama"):
+    def generate_summary(self, summary_request: SummaryRequest) -> SummaryResponse:
         """
         Generate summary from the text.
 
@@ -53,30 +54,31 @@ class SummaryGenerator:
         Returns:
             A dictionary containing the provider info and the summary
         """
-        # if len(text) > 10000:
-        chunks = self._chunk_text(text)
-        summaries = []
+        text = summary_request.text
+        provider = summary_request.provider
         try:
-            for chunk in chunks:
-                prompt = f"{self.DEFAULT_PROMPT} \n{chunk}"
-                summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
-                summaries.append(summary)
+            if len(text) < 10000:
+                prompt = f"{self.DEFAULT_PROMPT} \n{text}"
+                final_summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
+            else:
+                chunks = self._chunk_text(text)
+                summaries = []
+            
+                for chunk in chunks:
+                    prompt = f"{self.DEFAULT_PROMPT} \n{chunk}"
+                    summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
+                    summaries.append(summary)
 
-            final_summary = "\n\n".join(summaries)
+                final_summary = "\n\n".join(summaries)
+            
+            return SummaryResponse(provider=provider, summary=final_summary)
 
-            return {
-                "provider": provider,
-                "summary": final_summary
-            }
         except Exception as e:
             logger.error(f"An error occured in generating summary: {e}")
-            return {
-                "provider": provider,
-                "error": str(e),
-                "partial_summary": "\n\n".join(summaries) if summaries else None
-            }
+            return SummaryResponse(provider=provider, error= str(e), partial_summary="\n\n".join(summaries) if summaries else None)
         
-    def compare_summaries(self, text, summaries: List[Dict], provider: str = 'anthropic'):
+        
+    def compare_summaries(self, compare_req: SummaryCompareReq) -> SummaryCompareResp:
         """
         Receives a list of summaries, compares and evaluates them.
 
@@ -86,13 +88,14 @@ class SummaryGenerator:
         Returns:
             A dictionary containig provider info and the evaluation of summaries
         """
+        text = compare_req.text
+        summaries = compare_req.summaries
+        provider = compare_req.provider
+
         prompt = self.COMPARE_PROMPT.format(text=text, summaries=summaries)
         try:
             evaluation = self.model_manager.get_completion(provider, prompt)
-            return {
-                "provider": provider,
-                "evaluation_of_summaries": evaluation
-            }
+            return SummaryCompareResp(provider=provider, evaluation_of_summaries=evaluation)
         except Exception as e:
             logger.error(f"An error occured during comparison: {e}")
             raise
