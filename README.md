@@ -90,3 +90,10 @@ The system supports three types of summaries:
 - `brief`: 2-3 sentence overview
 - `detailed`: Comprehensive summary with main points
 - `bullets`: Key points in bullet format
+
+### Running Tests
+
+Run tests with coverage:
+```bash
+poetry run pytest --cov
+```
