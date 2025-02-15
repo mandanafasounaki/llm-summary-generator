@@ -2,7 +2,7 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import List, Dict
+from typing import List
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
@@ -15,7 +15,6 @@ from src.models.schemas import (
     SummaryCompareResp,
     SummaryRequest,
     SummaryResponse,
-    PathSummaryReq
 )
 from src.services import ModelManager, SummaryGenerator
 
@@ -38,25 +37,27 @@ doc_processor = DocumentProcessor()
 summary_generator = SummaryGenerator(model_manager)
 
 
-@app.post("/summarize", response_model=Dict)
-async def generate_summary(summary_req: PathSummaryReq):
+@app.post("/summarize", response_model=SummaryResponse)
+async def generate_summary(file_path: str, summary_type: str = "brief", providers: List[str] = ["anthropic"]):
     """
     Generate a summary from a file path
     """
-    try:  
-        
-        # Extract text from file_path
-        text = doc_processor.extract_text(summary_req.file_path)
+    try:
+        # Create input to document processor
+        doc = DocumentClass(file_path=file_path)
+
+        # Extract text from document
+        text = doc_processor.extract_text(doc)
 
         # Generate summary
-        summaries = []
-        for provider in summary_req.providers:
+        summaries = {}
+        for provider in providers:
             summary_req = SummaryRequest(
-                text=text, summary_type=summary_req.summary_type, provider=provider
+                text=text, summary_type=summary_type, provider=provider
             )
-            summaries.append(summary_generator.generate_summary(summary_req))
+            summaries[provider] = summary_generator.generate_summary(summary_req)
 
-        return {'summaries': summaries}
+        return summaries
 
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
@@ -64,12 +65,22 @@ async def generate_summary(summary_req: PathSummaryReq):
 
 
 @app.post("/compare-summaries", response_model=SummaryCompareResp)
-async def compare_summaries(compare_req: SummaryCompareReq):
+async def compare_summaries(file_path: str, summaries: List[SummaryResponse], provider: str = "anthropic"):
     """
     Generate and compare summaries from different providers for 
     """
  
     try:
+        # Validate file using DocumentClass
+        doc = DocumentClass(file_path=file_path)
+
+        # Extract text from document
+        text = doc_processor.extract_text(doc)
+
+        # Generate summaries from all requested providers
+        summaries = []
+        
+        compare_req = SummaryCompareReq(text=text, summaries=summaries, provider=provider)
         evaluation = summary_generator.compare_summaries(compare_req)
 
         return evaluation
