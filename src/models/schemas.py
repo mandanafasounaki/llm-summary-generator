@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -13,14 +13,14 @@ class DocumentClass(BaseModel):
     """
     Input validation document processing.
     """
-    file_path: str 
+
+    file_path: Path
 
     @field_validator("file_path")
-    def validate_file_path(cls, v: str) -> str:  
-        path = Path(v)
-        if not path.exists():
+    def validate_file_path(cls, v: Path):
+        if not v.exists():
             raise ValueError(f"File not found: {v}")
-        if path.stat().st_size > settings.MAX_FILE_SIZE:
+        if v.stat().st_size > settings.MAX_FILE_SIZE:
             raise ValueError(f"File size exceeds limit: {v}")
         return v
 
@@ -33,12 +33,6 @@ class SummaryRequest(BaseModel):
     text: str = Field(..., min_length=1)
     summary_type: Literal["brief", "detailed", "bullets"] = "brief"
     provider: Literal["openai", "anthropic", "gemma"] = "anthropic"
-
-
-class PathSummaryReq(BaseModel):
-    file_path: str
-    summary_type: Literal["brief", "detailed", "bullets"] = "brief"
-    providers: List[str] = ["anthropic"]
 
 
 class SummaryResponse(BaseModel):
@@ -57,7 +51,7 @@ class SummaryCompareReq(BaseModel):
     """
     Input for comparing a list of summaries.
     """
-    text: Optional[str] = None
+    text: str
     summaries: List[SummaryResponse]
     provider: str = "anthropic"
 
