@@ -29,11 +29,20 @@ A robust document analysis system that leverages multiple LLM providers (OpenAI,
 ```bash
 sudo docker build -t aracor-api . 
 ```
-**2. Run Docker container** 
+
+**2.Edit `.env` with your API keys and configuration:**
+```env
+OPENAI_API_KEY=your-openai-api-key
+ANTHROPIC_API_KEY=your-anthropic-api-key
+HUGGINGFACEHUB_API_TOKEN=your_huggingface_token
+```
+
+**3. Run Docker container** 
 ```bash
 sudo docker run --network host  -p 8000:8000 --env-file=.env --mount src="$(pwd)/sample_data",target=/sample_data,type=bind   aracor-api
 ```
-### Requests
+
+## API Requests
 **1. Summary Generation**
 ```bash
 curl -X POST "http://127.0.0.1:8000/summarize" -H "Content-Type: application/json" -d '{"file_path": "/sample_data/CV.pdf", "summary_type": "bullets", "providers": ["anthropic", "gemma"]}'
