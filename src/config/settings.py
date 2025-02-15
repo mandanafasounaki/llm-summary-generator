@@ -1,10 +1,12 @@
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional, Literal, ClassVar
 
 class Settings(BaseSettings):
     """
     Application settings and configuration
     """
+    model_config = ConfigDict(env_file = ".env", case_sensitive = True)
 
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
@@ -16,10 +18,5 @@ class Settings(BaseSettings):
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
     
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-
-
+    
 settings = Settings()
