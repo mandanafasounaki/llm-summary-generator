@@ -18,5 +18,7 @@ class Settings(BaseSettings):
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
     
-    
+    CHUNK_SIZE: int = 4000
+    REQUEST_TIMEOUT: int = 30
+    MAX_RETRIES: int = 3
 settings = Settings()
