@@ -1,0 +1,62 @@
+HNSW
+Hierarchical Navigable Small World (HNSW), yüksek boyutlu uzaylarda yaklaşık en yakın komşu araması (ANN) için kullanılan 
+verimli bir grafik tabanlı algoritmadır. Bu algoritma, veri noktalarını temsil eden düğümlerden oluşan çok katmanlı, 
+hiyerarşik bir grafik inşa eder. Düğümler arasındaki kenarlar, birbirine yakın olan noktaları bağlar. 
+Hiyerarşik yapı sayesinde, üst katmanlar daha az düğüm içerir ve daha uzun mesafeli bağlantılara sahiptir,
+alt katmanlar ise daha yoğun ve kısa mesafeli bağlantılar içerir. Bu yapı, grafiğin üst katmanlarından başlayarak 
+daha detaylı katmanlara doğru ilerleyerek hızlı ve ölçeklenebilir bir arama yapmayı sağlar.
+
+HNSW, büyük ölçekli veri setlerinde hız ve doğruluk arasında iyi bir denge sağladığı için öneri sistemleri, 
+görüntü arama ve doğal dil işleme gibi çeşitli uygulamalarda yaygın olarak kullanılır.
+
+
+
+
+
+
+Contrastive Loss, makine öğrenmesinde özellikle benzerlik öğrenmesi (similarity learning) görevlerinde 
+sıklıkla kullanılan bir kayıp fonksiyonudur.
+
+Amaç:
+
+Contrastive Loss'un temel amacı, modelin benzer veri noktalarını birbirine yakın, 
+farklı veri noktalarını ise birbirinden uzak bir şekilde temsil etmesini sağlamaktır.
+
+
+
+
+rmsprop
+RMSprop, derin öğrenme modellerini eğitmek için kullanılan popüler bir optimizasyon algoritmasıdır. 
+Adı, "Root Mean Square Propagation" (Kök Ortalama Kare Yayılımı) kelimelerinin birleşiminden gelir.
+
+Amaç:
+
+RMSprop'un temel amacı, modelin parametrelerini güncellerken, öğrenme oranını (learning rate) otomatik olarak ayarlamaktır. 
+Bu sayede, model daha hızlı ve istikrarlı bir şekilde eğitilir.
+
+Nasıl Çalışır?
+
+RMSprop, her parametre için ayrı bir hareketli ortalama (moving average) hesaplar. 
+Bu hareketli ortalama, parametre güncellemelerinin karelerinin ortalamasını temsil eder.
+
+* Geçmiş Gradyanların Etkisi: RMSprop, geçmiş gradyanların etkisini dikkate alarak öğrenme oranını ayarlar. Daha büyük gradyanların (yani daha büyük değişimlerin) öğrenme oranını daha fazla etkilemesini sağlar.
+
+* Öğrenme Oranının Dinamik Ayarlanması: RMSprop, her parametre için öğrenme oranını dinamik olarak ayarlar. Bu, modelin yerel minimumlara takılmasını önlemeye ve daha hızlı yakınsama sağlamaya yardımcı olur.
+
+Avantajları:
+
+* Hızlı Yakınsama: RMSprop, diğer optimizasyon algoritmalarına göre daha hızlı yakınsama sağlayabilir.
+* İstikrarlı Eğitim: RMSprop, öğrenme oranını otomatik olarak ayarladığı için, model eğitiminin daha istikrarlı olmasını sağlar.
+
+Dezavantajları:
+
+* Hiperparametre Seçimi: RMSprop'un performansı, "decay rate" gibi hiperparametrelerin seçimine bağlı olabilir.
+
+Uygulamaları:
+
+* Derin sinir ağları: Görüntü tanıma, doğal dil işleme, makine çevirisi gibi alanlarda kullanılır.
+* Petek ağları (Recurrent Neural Networks): Zaman serisi analizi, dil modelleme gibi görevlerde kullanılır.
+
+Özetle:
+
+RMSprop, derin öğrenme modellerini eğitmek için etkili bir optimizasyon algoritmasıdır. Öğrenme oranını dinamik olarak ayarlayarak, modelin daha hızlı ve istikrarlı bir şekilde eğitimini sağlar.

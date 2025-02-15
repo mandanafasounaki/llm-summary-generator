@@ -9,10 +9,9 @@ class Settings(BaseSettings):
     # API Keys
     OPENAI_KEY: Optional[str] = None
     ANTHROPIC_KEY: Optional[str] = None
-
+    DEFAULT_MODEL: str = 'anthropic'
 
     # Documents
-    SUPPORTED_FORMATS: Literal[".pdf", ".txt", ".docx"] = '.pdf'
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
     
 
