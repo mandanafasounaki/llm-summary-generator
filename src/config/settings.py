@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     """
 
     # API Keys
-    OPENAI_KEY: Optional[str] = None
-    ANTHROPIC_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
     DEFAULT_MODEL: str = 'anthropic'
 
     # Documents
