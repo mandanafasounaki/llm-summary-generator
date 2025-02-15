@@ -33,10 +33,10 @@ class DocumentProcessor:
         try:
             if doc_suffix == '.pdf':
                 return self._extract_from_pdf(doc_path)
-            elif doc_suffix == '.txt':
-                return self._extract_from_txt(doc_path)
             elif doc_suffix == '.docx':
                 return self._extract_from_docx(doc_path)
+            else:
+                return self._extract_from_txt(doc_path)
         except Exception as e:
             logger.error(f"Error processing {doc_path}: {e}")
             raise
