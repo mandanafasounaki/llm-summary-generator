@@ -10,7 +10,11 @@ class SummaryGenerator:
     """Generate summaries from text using different LLMs"""
 
     CHUNK_SIZE = 4000
-    DEFAULT_PROMPT = "Provide a brief summary of the following text: "
+    SUMMARY_TYPES = {
+        "brief": "Provide a brief 2-3 sentence summary of the following text:",
+        "detailed": "Provide a detailed summary of the following text, including main points and key details:",
+        "bullets": "Summarize the following text in bullet points, highlighting key information:"
+    }
     COMPARE_PROMPT = """
     Consider the following text and the provided summaries. Compare and evaluate the provided summaries.
     Here is the raw text: {text}
@@ -56,9 +60,11 @@ class SummaryGenerator:
         """
         text = summary_request.text
         provider = summary_request.provider
+        summary_type = summary_request.summary_type
+
         try:
             if len(text) < 10000:
-                prompt = f"{self.DEFAULT_PROMPT} \n{text}"
+                prompt = f"{self.SUMMARY_TYPES.get(summary_type)}\n{text}"
                 final_summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
             else:
                 chunks = self._chunk_text(text)
@@ -71,11 +77,11 @@ class SummaryGenerator:
 
                 final_summary = "\n\n".join(summaries)
             
-            return SummaryResponse(provider=provider, summary=final_summary)
+            return SummaryResponse(provider=provider, summary=final_summary, summary_type=summary_type)
 
         except Exception as e:
             logger.error(f"An error occured in generating summary: {e}")
-            return SummaryResponse(provider=provider, error= str(e), partial_summary="\n\n".join(summaries) if summaries else None)
+            return SummaryResponse(provider=provider, summary_type=summary_type, error= str(e), partial_summary="\n\n".join(summaries) if summaries else None)
         
         
     def compare_summaries(self, compare_req: SummaryCompareReq) -> SummaryCompareResp:

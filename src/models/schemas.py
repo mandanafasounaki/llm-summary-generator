@@ -1,6 +1,6 @@
 import logging
 from pydantic import Field, BaseModel, validator
-from typing import Dict, List, Optional, Literal
+from typing import List, Optional, Literal
 from pathlib import Path
 from ..config.settings import settings
 
@@ -20,12 +20,12 @@ class DocumentClass(BaseModel):
             raise ValueError(f"File size exceeds limit: {v}")
         return v
     
-
 class SummaryRequest(BaseModel):
     """
     Input validation for summary generation
     """
     text: str = Field(..., min_length=1)
+    summary_type: Literal['brief', 'detailed', 'bullets'] = 'brief'
     provider: Literal["openai", "anthropic", 'gemma'] = "anthropic"
 
 class SummaryResponse(BaseModel):
@@ -34,6 +34,7 @@ class SummaryResponse(BaseModel):
     """
     provider: str
     summary: Optional[str] = None
+    summary_type: str
     error: Optional[str] = None
     partial_summary: Optional[str] = None
 
