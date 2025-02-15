@@ -2,6 +2,7 @@ import logging
 from .model_manager import ModelManager
 from typing import List, Dict
 from  ..models.schemas import SummaryRequest, SummaryResponse, SummaryCompareReq, SummaryCompareResp
+from ..config.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 class SummaryGenerator:
     """Generate summaries from text using different LLMs"""
 
-    CHUNK_SIZE = 4000
+    CHUNK_SIZE = settings.CHUNK_SIZE
     SUMMARY_TYPES = {
         "brief": "Provide a brief 2-3 sentence summary of the following text:",
         "detailed": "Provide a detailed summary of the following text, including main points and key details:",
@@ -61,17 +62,17 @@ class SummaryGenerator:
         text = summary_request.text
         provider = summary_request.provider
         summary_type = summary_request.summary_type
-
+        summaries = []
+        
         try:
             if len(text) < 10000:
                 prompt = f"{self.SUMMARY_TYPES.get(summary_type)}\n{text}"
                 final_summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
             else:
                 chunks = self._chunk_text(text)
-                summaries = []
             
                 for chunk in chunks:
-                    prompt = f"{self.DEFAULT_PROMPT} \n{chunk}"
+                    prompt = f"{self.SUMMARY_TYPES.get(summary_type)}\n{chunk}"
                     summary = self.model_manager.get_completion(provider=provider, prompt=prompt)
                     summaries.append(summary)
 
