@@ -26,8 +26,28 @@ class SummaryRequest(BaseModel):
     Input validation for summary generation
     """
     text: str = Field(..., min_length=1)
-    provider: Literal["openai", "anthropic"] = "anthropic"
+    provider: Literal["openai", "anthropic", 'gemma'] = "anthropic"
 
+class SummaryResponse(BaseModel):
+    """
+    Summary output format
+    """
+    provider: str
+    summary: Optional[str] = None
+    error: Optional[str] = None
+    partial_summary: Optional[str] = None
+
+class SummaryCompareReq(BaseModel):
+    text: str 
+    summaries: List[SummaryResponse]
+    provider: Optional[str] = 'anthropic'
+
+class SummaryCompareResp(BaseModel):
+    """
+    Summary compare output format
+    """
+    provider: str
+    evaluation_of_summaries: str
 
 
 
