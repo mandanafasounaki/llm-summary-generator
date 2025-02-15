@@ -5,7 +5,6 @@ from ..config.settings import settings
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-from langchain_core.messages import HumanMessage
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -63,7 +62,7 @@ class ModelManager:
         Get chat completion from specified model.
         """
         if provider not in self.models:
-            raise ValueError(f"The model {provider} is not supported.")
+            raise ValueError(f"The provider {provider} is not supported.")
         
         try:
             response = self.models[provider].invoke(prompt)
