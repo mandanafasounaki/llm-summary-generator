@@ -49,4 +49,8 @@ class ModelManager:
             raise ValueError(f"The model {model} is not supported.")
         
         try:
-            response = self.models[model].invoke()
+            response = self.models[model].invoke(HumanMessage(content=prompt))
+            return response.content
+        except Exception as e:
+            logger.error(f"Error getting completion from {model}: {e}")
+            raise
