@@ -1,6 +1,6 @@
 import os
-from typing import List, Dict
 import logging
+from dotenv import load_dotenv
 from ..config.settings import settings
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
@@ -9,7 +9,7 @@ from langchain_core.messages import HumanMessage
 
 # logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+load_dotenv()
 
 class ModelManager:
     """
@@ -24,15 +24,18 @@ class ModelManager:
         """
         Initialize models
         """
-        if os.getenv("OPENAI_KEY"):
+
+        logger.info(os.getenv("OPENAI_API_KEY"))
+
+        if os.getenv("OPENAI_API_KEY"):
             self.models['openai'] = ChatOpenAI(
                 model='gpt-4o',
-                temperatire=0,
+                temperature=0,
                 timeout=30,
                 max_retries=3
             )
 
-        if os.getenv('ANTHROPIC_KEY'):
+        if os.getenv('ANTHROPIC_API_KEY'):
             self.models['anthropic'] = ChatAnthropic(
                 model='claude-3-5-sonnet-20241022',
                 temperature=0,
