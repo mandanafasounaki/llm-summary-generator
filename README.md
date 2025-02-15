@@ -105,5 +105,5 @@ CHUNK_SIZE=4000           # Text chunk size for processing
 
 Run tests with coverage:
 ```bash
-poetry run pytest --cov
+poetry run pytest -cov
 ```
