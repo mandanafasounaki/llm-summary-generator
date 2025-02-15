@@ -63,5 +63,8 @@ class DocumentProcessor:
     
 
     def _extract_from_txt(self, path: Path):
+        """
+        Extract text from txt file.
+        """
         with open(path, 'r', encoding='utf-8') as f:
             return f.read().strip()
