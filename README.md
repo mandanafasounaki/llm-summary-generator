@@ -91,6 +91,16 @@ The system supports three types of summaries:
 - `detailed`: Comprehensive summary with main points
 - `bullets`: Key points in bullet format
 
+
+### Configuration Options
+
+Key configuration options in `.env`:
+```env
+MAX_RETRIES=3              # Maximum retry attempts for API calls
+REQUEST_TIMEOUT=30         # API request timeout in seconds
+CHUNK_SIZE=4000           # Text chunk size for processing
+```
+
 ### Running Tests
 
 Run tests with coverage:
