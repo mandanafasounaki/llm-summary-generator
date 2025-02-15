@@ -3,7 +3,7 @@ from ..models.schemas import DocumentClass
 import logging
 from pathlib import Path
 import PyPDF2 
-import docx
+from docx import Document
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,6 +12,7 @@ class DocumentProcessor:
     """
     Process and extract text from documents.
     """
+    SUPPORTED_FORMATS = {'.txt', '.pdf', '.docx'}
 
     def extract_text(self, file_path: Path):
         """
@@ -27,7 +28,7 @@ class DocumentProcessor:
         doc_path = input_doc.file_path
         doc_suffix = input_doc.file_path.suffix
 
-        if doc_suffix not in settings.SUPPORTED_FORMATS:
+        if doc_suffix not in self.SUPPORTED_FORMATS:
             raise ValueError(f"Unsupported format: {doc_suffix}")
         
         try:
@@ -58,7 +59,7 @@ class DocumentProcessor:
         """
         Extract text from docx file.
         """
-        doc = docx.Document(path)
+        doc = Document(path)
         return '\n'.join([par.text for par in doc.paragraphs])
     
 
