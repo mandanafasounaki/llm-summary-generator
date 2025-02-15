@@ -11,8 +11,7 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: Optional[str] = None
     HUGGINGFACEHUB_API_TOKEN: str  
     DEFAULT_MODEL: str = 'anthropic'
-    USE_LLAMA: str = True
-    USE_GPTJ: str = True
+    USE_GEMMA: str = True
 
     # Documents
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
