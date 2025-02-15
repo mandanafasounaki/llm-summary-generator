@@ -14,11 +14,12 @@ class DocumentClass(BaseModel):
     Input validation document processing.
     """
 
-    file_path: Path
+    file_path: str
 
     @field_validator("file_path")
-    def validate_file_path(cls, v: Path):
-        if not v.exists():
+    def validate_file_path(cls, v: str) -> str:
+        path = Path(v)
+        if not path.exists():
             raise ValueError(f"File not found: {v}")
         if v.stat().st_size > settings.MAX_FILE_SIZE:
             raise ValueError(f"File size exceeds limit: {v}")
@@ -51,7 +52,8 @@ class SummaryCompareReq(BaseModel):
     """
     Input for comparing a list of summaries.
     """
-    text: str
+
+    text: Optional[str] = None
     summaries: List[SummaryResponse]
     provider: str = "anthropic"
 

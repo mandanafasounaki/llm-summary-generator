@@ -2,20 +2,18 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
-from src.processors.document import DocumentProcessor
-
 from src.config.settings import settings
 from src.models.schemas import (
-    DocumentClass,
+    PathSummaryReq,
     SummaryCompareReq,
     SummaryCompareResp,
-    SummaryRequest,
-    SummaryResponse,
+    SummaryRequest
 )
+from src.processors.document import DocumentProcessor
 from src.services import ModelManager, SummaryGenerator
 
 # Configure logging
@@ -43,21 +41,19 @@ async def generate_summary(file_path: str, summary_type: str = "brief", provider
     Generate a summary from a file path
     """
     try:
-        # Create input to document processor
-        doc = DocumentClass(file_path=file_path)
 
-        # Extract text from document
-        text = doc_processor.extract_text(doc)
-
+        # Extract text from file_path
+        text = doc_processor.extract_text(summary_req.file_path)
+                                    
         # Generate summary
-        summaries = {}
+        summaries = []
         for provider in providers:
             summary_req = SummaryRequest(
                 text=text, summary_type=summary_type, provider=provider
             )
-            summaries[provider] = summary_generator.generate_summary(summary_req)
-
-        return summaries
+            summaries.append(summary_generator.generate_summary(summary_req))
+            
+        return {"summaries": summaries}
 
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
@@ -67,9 +63,9 @@ async def generate_summary(file_path: str, summary_type: str = "brief", provider
 @app.post("/compare-summaries", response_model=SummaryCompareResp)
 async def compare_summaries(file_path: str, summaries: List[SummaryResponse], provider: str = "anthropic"):
     """
-    Generate and compare summaries from different providers for 
+    Generate and compare summaries from different providers for
     """
- 
+
     try:
         # Validate file using DocumentClass
         doc = DocumentClass(file_path=file_path)
