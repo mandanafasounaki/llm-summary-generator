@@ -23,8 +23,8 @@ class SummaryGenerator:
         "bullets": "Summarize the following text in bullet points, highlighting key information:",
     }
     COMPARE_PROMPT = """
-    Consider the following text and the provided summaries. Compare and evaluate the provided summaries.
-    Here is the raw text: {text}
+    You are an editor that examines the provided summaries of a text and compares and evaluates the provided summaries.
+
     These are the summaries: {summaries}
     """
 
