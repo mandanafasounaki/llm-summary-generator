@@ -13,13 +13,17 @@ A robust document analysis system that leverages multiple LLM providers (OpenAI,
 - **Data Validation**: Input/output validation using Pydantic
 - **Configurable**: Environment-based configuration management
 
-## Requirements
+Note: Gemma doesn't always work.
 
-- Python 3.11 or 3.12
-- Poetry package manager
+## Requirements
 - OpenAI API key
 - Anthropic API key
 - Hugging Face access token
+
+- Python 3.11 or 3.12
+- Poetry package manager
+OR
+- Docker
 
 
 ### Docker
@@ -27,16 +31,18 @@ A robust document analysis system that leverages multiple LLM providers (OpenAI,
 
 **1. Build Docker container**
 ```bash
-sudo docker build --build-arg OPENAI_API_KEY=your-openai-api-key \
-ANTHROPIC_API_KEY=your-anthropic-api-key \
-HUGGINGFACEHUB_API_TOKEN=your_huggingface_token\
--t aracor-api . 
+sudo docker build -t aracor-api . 
 ```
 
-**2. Run Docker container** 
+**2. Copy `.env` with your API keys into /sample_data/**
+
+
+**3. Run Docker container** 
 ```bash
-sudo docker run --network host  -p 8000:8000 --env-file=.env --mount src="$(pwd)/sample_data",target=/sample_data,type=bind   aracor-api
+sudo docker run --network host  -p 8000:8000 --env-file=sample_data/.env  --mount src="$(pwd)/sample_data",target=/sample_data,type=bind  aracor-api
 ```
+
+
 
 ## API Requests
 **1. Summary Generation**
