@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Dict, List, Optional
+# from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
@@ -48,7 +48,7 @@ class ModelManager:
 
         # Open source models
         hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-        if os.getenv("USE_GEMMA") == True:
+        if os.getenv("USE_GEMMA") == 'True':
             hf_neo = HuggingFaceEndpoint(
                 repo_id=settings.GOOGLE_MODEL,
                 task="text-generation",

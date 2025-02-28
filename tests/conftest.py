@@ -20,8 +20,3 @@ def document_processor():
 @pytest.fixture
 def model_manager():
     return ModelManager()
-
-
-@pytest.fixture
-def summary_generator():
-    return SummaryGenerator(model_manager)

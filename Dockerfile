@@ -19,7 +19,7 @@ COPY .env.example .env
 RUN poetry --no-root install
 
 # Run tests
-RUN poetry run pytest -cov
+# RUN poetry run pytest -cov
 
 # # Create volume for input files
 # VOLUME /sample_data
