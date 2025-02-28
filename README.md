@@ -100,6 +100,17 @@ DEFAULT_MODEL_PROVIDER=anthropic
 ```
 
 ## Usage
+### For API:
+
+```bash
+poetry run uvicorn src.app.api:app
+```
+### For main.py
+
+```bash
+poetry run python -m src.main
+```
+
 
 ### Basic Usage
 
