@@ -34,14 +34,13 @@ OR
 sudo docker build -t aracor-api . 
 ```
 
-**2. Copy `.env` with your API keys into /sample_data/**
+**2. Create `.env` with your API keys**
 
 
 **3. Run Docker container** 
 ```bash
-sudo docker run --network host  -p 8000:8000 --env-file=sample_data/.env  --mount src="$(pwd)/sample_data",target=/sample_data,type=bind  aracor-api
+sudo docker run --network host  -p 8000:8000 --env-file=.env  --mount src="$(pwd)/sample_data",target=/sample_data,type=bind  aracor-api
 ```
-
 
 
 ## API Requests
@@ -136,6 +135,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
 
 ### Summary Types
 
