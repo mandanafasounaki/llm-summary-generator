@@ -44,7 +44,7 @@ class SummaryGenerator:
             if len(word) + current_length > self.CHUNK_SIZE:
                 chunks.append(" ".join(current_chunk))
                 current_chunk = [word]
-                current_length = len(word) + 1
+                current_length = len(word)
             else:
                 current_chunk.append(word)
                 current_length += len(word) + 1
@@ -110,12 +110,14 @@ class SummaryGenerator:
         Returns:
             A dictionary containig provider info and the evaluation of summaries
         """
-        text = compare_req.text
-        summaries = compare_req.summaries
-        provider = compare_req.provider
-
-        prompt = self.COMPARE_PROMPT.format(text=text, summaries=summaries)
         try:
+            text = compare_req.text
+            summaries = compare_req.summaries
+            provider = compare_req.provider
+            
+
+            prompt = self.COMPARE_PROMPT.format(text=text, summaries=summaries)
+            
             evaluation = self.model_manager.get_completion(provider, prompt)
             return SummaryCompareResp(
                 provider=provider, evaluation_of_summaries=evaluation

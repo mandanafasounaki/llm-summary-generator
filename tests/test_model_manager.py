@@ -66,4 +66,4 @@ class TestChatModelHandler:
     #     with pytest.raises(RetryError):
     #         chat_handler.get_completion(self.PROVIDER, self.PROMPT)
 
-    #     assert chat_handler.models[self.PROVIDER].invoke.call_count == 3  # Should retry 3 times
+    #     assert chat_handler.models[self.PROVIDER].invoke.call_count == 3 
