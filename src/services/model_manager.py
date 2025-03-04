@@ -48,6 +48,9 @@ class ModelManager:
 
         # Open source models
         hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+        if not hf_token:
+            raise ValueError("HUGGINGFACEHUB_API_TOKEN is not set")
+
         if os.getenv("USE_GEMMA") == 'True':
             hf_neo = HuggingFaceEndpoint(
                 repo_id=settings.GOOGLE_MODEL,
