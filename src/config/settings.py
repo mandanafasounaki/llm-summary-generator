@@ -1,7 +1,7 @@
 from typing import ClassVar, Literal, Optional
 
-from pydantic import ConfigDict
-from pydantic_settings import BaseSettings
+# from pydantic import ConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     Application settings and configuration
     """
 
-    model_config = ConfigDict(env_file=".env", case_sensitive=True)
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
