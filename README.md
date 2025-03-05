@@ -31,7 +31,7 @@ OR
 
 **1. Build Docker container**
 ```bash
-sudo docker build -t aracor-api . 
+sudo docker build -t summary-generator . 
 ```
 
 **2. Create `.env` with your API keys**
@@ -39,7 +39,7 @@ sudo docker build -t aracor-api .
 
 **3. Run Docker container** 
 ```bash
-sudo docker run --network host  -p 8000:8000 --env-file=.env  --mount src="$(pwd)/sample_data",target=/sample_data,type=bind  aracor-api
+sudo docker run --network host  -p 8000:8000 --env-file=.env  --mount src="$(pwd)/sample_data",target=/sample_data,type=bind  summary-generator
 ```
 
 
@@ -77,8 +77,8 @@ curl -X POST "http://127.0.0.1:8000/summarize" -H "Content-Type: application/jso
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/mandanafasounaki/aracor-ai-assignment-mandanafasounaki
-cd aracor-ai-assignment-mandanafasounaki
+git clone https://github.com/mandanafasounaki/llm-summary-generator
+cd llm-summary-generator
 ```
 
 2. Install dependencies using Poetry:
