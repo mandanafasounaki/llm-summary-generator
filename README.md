@@ -1,4 +1,4 @@
-# Document Analyzer
+# LLM-Based Summary Generator
 
 A robust document analysis system that leverages multiple LLM providers (OpenAI, Anthropic, and Gemma) through LangChain to process and analyze documents in various formats.
 
@@ -171,5 +171,4 @@ Run tests with coverage:
 ```bash
 poetry run pytest -cov
 ```
-
 
